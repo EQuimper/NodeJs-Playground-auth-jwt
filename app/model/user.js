@@ -17,7 +17,7 @@ const UserSchema = new Schema({
 	}
 });
 
-UserSchema.pre('save', next => {
+UserSchema.pre('save', function (next) { // Cant use arrow here http://stackoverflow.com/questions/36794709/inside-schema-method-scopes-this-is-empty-in-mongoose-4-4-12
 	const user = this;
 	if (this.isModified('password') || this.isNew) {
 		bcrypt.genSalt(10, (err, salt) => {
@@ -37,7 +37,7 @@ UserSchema.pre('save', next => {
 	}
 });
 
-UserSchema.methods.comparePassword = (passw, cb) => {
+UserSchema.methods.comparePassword = function(passw, cb) { // no arrow here cause of this
 	bcrypt.compare(passw, this.password, (err, isMatch) => {
 		if (err) {
 			return cb(err);
